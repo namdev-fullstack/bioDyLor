@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1"
+    />
+    <title>Bio Game | Thu Acc Giá Cao</title>
+    <meta
+      name="description"
+      content="Bio game hiện đại • Thu acc giá cao • Liên hệ Zalo • Link tới Shop Acc và Facebook"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg1: #0f1020;
+        --bg2: #0a0b14;
+        --primary: #8a63ff;
+        --secondary: #00ffd1;
+        --accent: #ff4d6d;
+        --text: #eef2ff;
+        --muted: #aab3d1;
+        --glass: rgba(255, 255, 255, 0.08);
+        --glass-strong: rgba(255, 255, 255, 0.12);
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        --radius: 18px;
+        --radius-sm: 12px;
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto,
+          Helvetica, Arial, sans-serif;
+        color: var(--text);
+        background: radial-gradient(
+            1200px 800px at 80% -10%,
+            #2a1b5a40,
+            transparent
+          ),
+          radial-gradient(900px 600px at -10% 20%, #00ffd122, transparent),
+          linear-gradient(180deg, var(--bg1), var(--bg2));
+        overflow-x: hidden;
+      }
+
+      /* Animated background orbs */
+      .orbs {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+        filter: blur(40px) saturate(120%);
+        opacity: 0.9;
+      }
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        mix-blend-mode: screen;
+      }
+      .orb.o1 {
+        width: 360px;
+        height: 360px;
+        left: -120px;
+        top: -80px;
+        background: #8a63ff55;
+        animation: float1 12s ease-in-out infinite;
+      }
+      .orb.o2 {
+        width: 420px;
+        height: 420px;
+        right: -160px;
+        top: 20%;
+        background: #00ffd155;
+        animation: float2 14s ease-in-out infinite;
+      }
+      .orb.o3 {
+        width: 300px;
+        height: 300px;
+        left: 50%;
+        bottom: -140px;
+        transform: translateX(-50%);
+        background: #ff4d6d55;
+        animation: float3 16s ease-in-out infinite;
+      }
+      @keyframes float1 {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(30px, 20px);
+        }
+      }
+      @keyframes float2 {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(-25px, 25px);
+        }
+      }
+      @keyframes float3 {
+        0%,
+        100% {
+          transform: translate(-50%, 0);
+        }
+        50% {
+          transform: translate(-30%, -15px);
+        }
+      }
+
+      .wrap {
+        position: relative;
+        z-index: 1;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px 16px 32px;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 440px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.06)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 22px 18px 18px;
+      }
+
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      /* Avatar enhanced effects */
+      .avatar-wrap {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        border-radius: 999px;
+        padding: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35),
+          0 0 0 4px rgba(138, 99, 255, 0.12) inset;
+        isolation: isolate;
+        transition: transform 0.3s ease;
+      }
+      .avatar-wrap::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: 999px;
+        background: conic-gradient(
+          from 0deg,
+          var(--primary),
+          var(--secondary),
+          var(--accent),
+          var(--primary)
+        );
+        filter: blur(6px) saturate(120%);
+        z-index: -1;
+        animation: spin 12s linear infinite;
+        opacity: 0.85;
+      }
+      .avatar-wrap::after {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border-radius: 999px;
+        background: radial-gradient(
+          circle at 50% 30%,
+          rgba(255, 255, 255, 0.16),
+          rgba(255, 255, 255, 0.04)
+        );
+        z-index: -1;
+      }
+
+      .avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 30%, #8a63ff, #4a2fb3);
+        display: grid;
+        place-items: center;
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18),
+          0 18px 30px rgba(138, 99, 255, 0.35);
+        animation: floatAvatar 4.5s ease-in-out infinite;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+      }
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .avatar i {
+        font-size: 40px;
+        color: white;
+      }
+      .avatar-wrap:hover {
+        transform: translateY(-2px) scale(1.02);
+      }
+      .avatar-wrap:hover .avatar {
+        transform: scale(1.03);
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.22),
+          0 22px 40px rgba(138, 99, 255, 0.45);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes floatAvatar {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+
+      .headline {
+        flex: 0 0 auto;
+      }
+      .title {
+        margin: 0;
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: 0.2px;
+      }
+      .subtitle {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .badges {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin: 14px 0 18px;
+      }
+      .badge {
+        font-size: 11px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        color: #cfe1ff;
+        background: rgba(138, 99, 255, 0.18);
+        border: 1px solid rgba(138, 99, 255, 0.35);
+      }
+
+      .cta {
+        display: grid;
+        gap: 12px;
+        margin-top: 2px;
+      }
+      .btn {
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 14px 16px;
+        border-radius: var(--radius-sm);
+        background: var(--glass);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        transition: transform 0.2s ease, background 0.2s ease,
+          box-shadow 0.2s ease, border 0.2s ease;
+      }
+      .btn i {
+        font-size: 18px;
+      }
+      .btn:active {
+        transform: translateY(1px) scale(0.995);
+      }
+      .btn:hover {
+        background: var(--glass-strong);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+
+      .btn.primary {
+        background: linear-gradient(135deg, var(--primary), #5e3ae6);
+        border-color: transparent;
+      }
+      .btn.primary:hover {
+        filter: brightness(1.05);
+        box-shadow: 0 10px 26px rgba(138, 99, 255, 0.35);
+      }
+      .btn.secondary {
+        background: linear-gradient(135deg, #00ffd1, #00bfa3);
+        color: #071218;
+        border-color: transparent;
+      }
+      .btn.secondary:hover {
+        filter: brightness(1.05);
+        box-shadow: 0 10px 26px rgba(0, 255, 209, 0.32);
+      }
+      .btn.outline {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+
+      .tiny {
+        text-align: center;
+        color: #cbd5ff;
+        font-size: 12px;
+        opacity: 0.9;
+        margin-top: 12px;
+      }
+
+      /* Footer quick actions */
+      .dock {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 22px;
+        z-index: 2;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
+      }
+      .dock-inner {
+        pointer-events: auto;
+        display: grid;
+        grid-auto-flow: column;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: var(--shadow);
+        padding: 8px;
+        border-radius: 14px;
+        backdrop-filter: blur(12px);
+      }
+      .dock .mini {
+        width: 46px;
+        height: 46px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        text-decoration: none;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+      .dock .mini:active {
+        transform: translateY(1px) scale(0.98);
+      }
+      .dock .mini:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      /* Modal */
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(7, 10, 20, 0.65);
+        backdrop-filter: blur(6px);
+        z-index: 10;
+      }
+      .modal.open {
+        display: flex;
+      }
+      .sheet {
+        width: 100%;
+        max-width: 440px;
+        background: rgba(17, 20, 35, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 16px;
+      }
+      .sheet .sheet-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .sheet h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .x {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: var(--text);
+      }
+      .qr {
+        margin-top: 14px;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+        display: grid;
+        place-items: center;
+      }
+      .qr img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      @media (min-width: 480px) {
+        .title {
+          font-size: 22px;
+        }
+        .subtitle {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="orbs" aria-hidden="true">
+      <div class="orb o1"></div>
+      <div class="orb o2"></div>
+      <div class="orb o3"></div>
+    </div>
+
+    <main class="wrap">
+      <section class="card">
+        <div class="top">
+          <div class="avatar-wrap" aria-hidden="true">
+            <div class="avatar">
+              <img src="avatar2.jpeg" alt="" />
+            </div>
+          </div>
+          <div class="headline">
+            <h1 class="title">DyLor</h1>
+            <p class="subtitle">Shop Acc Giá Rẻ (học sinh-sinh viên)
+               <br> Thu Acc Giá Cao</p>
+          </div>
+        </div>
+
+        <div class="badges">
+          <span class="badge">Liên hệ 24/7</span>
+          <span class="badge">Không lo về giá</span>
+        </div>
+
+        <div class="cta">
+          <a class="btn primary" href="https://www.tiktok.com/@ronaldylor_04" target="_blank" rel="noopener">
+            <i class="fa-brands fa-zalo"></i>
+            <span>Tiktok: DyLor</span>
+          </a>
+
+          <!-- <a
+            class="btn outline"
+            href="https://shoplienquan.vercel.app/"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="fa-solid fa-store"></i>
+            <span>Vào Shop Acc</span>
+          </a> -->
+          <a
+          href="https://shopdylor.vercel.app/"
+            class="btn outline"
+            href="https://www.facebook.com/namdev1029"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="fa-solid fa-store"></i>
+            <span>Vào Shop Acc</span>
+          </a>
+        </div>
+
+        <p class="tiny">Bán sát giá nhập</p>
+      </section>
+    </main>
+
+   
+
+    <script>
+      (function () {
+        const zaloLink = "https://zalo.me/your-id"; // TODO: đổi thành link Zalo của bạn
+        const qrImg = document.getElementById("qr-img");
+        qrImg.src =
+          "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=" +
+          encodeURIComponent(zaloLink);
+
+        function openModal() {
+          document.getElementById("qr-modal").classList.add("open");
+        }
+        function closeModal() {
+          document.getElementById("qr-modal").classList.remove("open");
+        }
+        document.getElementById("open-qr").addEventListener("click", openModal);
+        document
+          .getElementById("mini-qr")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            openModal();
+          });
+        document
+          .getElementById("close-qr")
+          .addEventListener("click", closeModal);
+        document
+          .getElementById("qr-modal")
+          .addEventListener("click", function (e) {
+            if (e.target === this) closeModal();
+          });
+      })();
+    </script>
+  </body>
+</html>
